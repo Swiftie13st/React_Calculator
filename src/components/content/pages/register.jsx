@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Base from "./base";
+import Base from "../base";
 
 class Register extends Component {
   state = {};
