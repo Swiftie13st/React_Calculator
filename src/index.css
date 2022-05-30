@@ -26,6 +26,7 @@ code {
   border: 2px solid black;
 }
 
+
 .output {
   grid-column: 1 / span 4;
   display: flex;

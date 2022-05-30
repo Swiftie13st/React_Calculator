@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import Base from "../base";
+import { connect } from "react-redux";
+import DigitButton from "./../calculator/digitbutton";
+import ACTIONS from "../../redux/actions";
+import OperationButton from './../calculator/operationbutton';
 
 class Calculator extends Component {
   state = {};
@@ -9,31 +13,63 @@ class Calculator extends Component {
         <h1>计算器</h1>
         <div className="calculator">
           <div className="output">
-            <div className="last-output">123 *</div>
-            <div className="current-output">88888888</div>
+            <div className="last-output">
+              {this.props.lastOperand} {this.props.operation}
+            </div>
+            <div className="current-output">{this.props.currentOperand}</div>
           </div>
-          <button className="button-ac">AC</button>
-          <button>Del</button>
-          <button>/</button>
-          <button>7</button>
-          <button>8</button>
-          <button>9</button>
-          <button>*</button>
-          <button>4</button>
-          <button>5</button>
-          <button>6</button>
-          <button>-</button>
-          <button>1</button>
-          <button>2</button>
-          <button>3</button>
-          <button>+</button>
-          <button>0</button>
-          <button>.</button>
-          <button className="button-equal">=</button>
+          <button onClick={this.props.clear} className="button-ac">
+            AC
+          </button>
+          <button onClick={this.props.delete_digit}>Del</button>
+          <OperationButton operation={"÷"} />
+          <DigitButton digit={"7"} />
+          <DigitButton digit={"8"} />
+          <DigitButton digit={"9"} />
+          <OperationButton operation={"x"} />
+          <DigitButton digit={"4"} />
+          <DigitButton digit={"5"} />
+          <DigitButton digit={"6"} />
+          <OperationButton operation={"-"} />
+          <DigitButton digit={"1"} />
+          <DigitButton digit={"2"} />
+          <DigitButton digit={"3"} />
+          <OperationButton operation={"+"} />
+          <DigitButton digit={"0"} />
+          <DigitButton digit={"."} />
+          <button onClick={this.props.evaluate} className="button-equal">
+            =
+          </button>
         </div>
       </Base>
     );
   }
 }
 
-export default Calculator;
+const mapStateToProps = (state, props) => {
+  return {
+    currentOperand: state.currentOperand, //当前操作
+    lastOperand: state.lastOperand, //上次操作
+    operation: state.operation, //操作符
+  };
+};
+
+const mapDispatchToProps = {
+  delete_digit: () => {
+    return {
+      type: ACTIONS.DELETE_DIGIT,
+    };
+  },
+  clear: () => {
+    return {
+      type: ACTIONS.CLEAR,
+    };
+  },
+  evaluate: () => {
+    return {
+      type: ACTIONS.EVALUATE,
+    };
+  },
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Calculator);
