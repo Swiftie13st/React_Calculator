@@ -7,7 +7,7 @@ class NavBar extends Component {
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container">
-          <Link className="navbar-brand" to="/">
+          <Link className="navbar-brand" to="/calculator/">
             Web
           </Link>
           <button
@@ -24,24 +24,24 @@ class NavBar extends Component {
           <div className="collapse navbar-collapse" id="navbarText">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className="navbar-brand" to="/home">
+                <Link className="navbar-brand" to="/calculator/home">
                   首页
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="navbar-brand" to="/calculator">
+                <Link className="navbar-brand" to="/calculator/calculator">
                   计算器
                 </Link>
               </li>
             </ul>
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link className="navbar-brand" to="/login">
+                <Link className="navbar-brand" to="/calculator/login">
                   登录
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="navbar-brand" to="/register">
+                <Link className="navbar-brand" to="/calculator/register">
                   注册
                 </Link>
               </li>
