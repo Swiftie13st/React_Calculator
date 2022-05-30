@@ -1,8 +1,75 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import $ from "jquery";
 
 class NavBar extends Component {
   state = {};
+
+  handleClick = () => {
+    $.ajax({
+      url: "https://app165.acapp.acwing.com.cn/calculator/logout/",
+      type: "get",
+      success: (resp) => {
+        console.log(resp);
+        if (resp.result === "success") {
+          window.location.href = "/calculator";
+        }
+      },
+    });
+  }
+
+  render_calculator = () => {
+    if (this.props.is_login) {
+      return (
+        <li className="nav-item">
+          <Link className="navbar-brand" to="/calculator/calculator">
+            计算器
+          </Link>
+        </li>
+      );
+    } else {
+      return "";
+    }
+  };
+
+  render_user = () => {
+    if (this.props.is_login) {
+      return (
+        <ul className="navbar-nav">
+          <li className="nav-item">
+            <a className="navbar-brand" style={{ cursor: "pointer" }}>
+              {this.props.username}
+            </a>
+          </li>
+          <li className="nav-item">
+            <a
+              className="navbar-brand"
+              style={{ cursor: "pointer" }}
+              onClick={this.handleClick}
+            >
+              退出
+            </a>
+          </li>
+        </ul>
+      );
+    } else {
+      return (
+        <ul className="navbar-nav">
+          <li className="nav-item">
+            <Link className="navbar-brand" to="/calculator/login">
+              登录
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="navbar-brand" to="/calculator/register">
+              注册
+            </Link>
+          </li>
+        </ul>
+      );
+    }
+  };
+
   render() {
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -28,24 +95,9 @@ class NavBar extends Component {
                   首页
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link className="navbar-brand" to="/calculator/calculator">
-                  计算器
-                </Link>
-              </li>
+              {this.render_calculator()}
             </ul>
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <Link className="navbar-brand" to="/calculator/login">
-                  登录
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="navbar-brand" to="/calculator/register">
-                  注册
-                </Link>
-              </li>
-            </ul>
+            {this.render_user()}
           </div>
         </div>
       </nav>
