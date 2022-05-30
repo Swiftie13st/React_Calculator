@@ -1,6 +1,6 @@
 import ACTIONS from "./actions";
 //计算结果
-const evaluate = (state) => { 
+const evaluate = (state) => {
   let { lastOperand, currentOperand, operation } = state;
   let last = parseFloat(lastOperand);
   let current = parseFloat(currentOperand);
@@ -18,6 +18,9 @@ const evaluate = (state) => {
       break;
     case "÷":
       res = last / current;
+      break;
+    default:
+      res = last;
   }
   return res.toString();
 };
@@ -27,11 +30,18 @@ const reducer = (
     currentOperand: "",
     lastOperand: "",
     operation: "",
+    overwrite: false, //计算完下一次输入是否清空当前值
   },
   action
 ) => {
   switch (action.type) {
     case ACTIONS.ADD_DIGIT:
+      if (state.overwrite)
+        return {
+          ...state,
+          currentOperand: action.digit,
+          overwrite: false,
+        };
       if (state.currentOperand === "0" && action.digit === "0") return state;
       if (state.currentOperand === "0" && action.digit !== ".")
         return {
@@ -51,6 +61,12 @@ const reducer = (
       };
 
     case ACTIONS.DELETE_DIGIT:
+      if (state.overwrite)
+        return {
+          ...state,
+          currentOperand: "",
+          overwrite: false,
+        };
       if (state.currentOperand === "") return state;
       return {
         ...state,
@@ -76,6 +92,28 @@ const reducer = (
         lastOperand: evaluate(state),
         operation: action.operation,
         currentOperand: "",
+      };
+    case ACTIONS.CLEAR:
+      return {
+        ...state,
+        currentOperand: "",
+        lastOperand: "",
+        operation: "",
+      };
+    case ACTIONS.EVALUATE:
+      if (
+        //某一个操作为空直接返回即可
+        state.currentOperand === "" ||
+        state.lastOperand === "" ||
+        state.operation === ""
+      )
+        return state;
+      return {
+        ...state,
+        currentOperand: evaluate(state),
+        lastOperand: "",
+        operation: "",
+        overwrite: true,
       };
     default:
       return state;

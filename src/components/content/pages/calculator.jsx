@@ -3,10 +3,20 @@ import Base from "../base";
 import { connect } from "react-redux";
 import DigitButton from "./../calculator/digitbutton";
 import ACTIONS from "../../redux/actions";
-import OperationButton from './../calculator/operationbutton';
+import OperationButton from "./../calculator/operationbutton";
 
 class Calculator extends Component {
-  state = {};
+  state = {
+    formater: Intl.NumberFormat("en-us"),
+  };
+
+  format = (number) => {
+    if (number === "") return "";
+    const [integer, decimal] = number.split(".");
+    if (decimal === undefined) return this.state.formater.format(integer);
+    return `${this.state.formater.format(integer)}.${decimal}`;
+  };
+
   render() {
     return (
       <Base>
@@ -14,9 +24,11 @@ class Calculator extends Component {
         <div className="calculator">
           <div className="output">
             <div className="last-output">
-              {this.props.lastOperand} {this.props.operation}
+              {this.format(this.props.lastOperand)} {this.props.operation}
             </div>
-            <div className="current-output">{this.props.currentOperand}</div>
+            <div className="current-output">
+              {this.format(this.props.currentOperand)}
+            </div>
           </div>
           <button onClick={this.props.clear} className="button-ac">
             AC
